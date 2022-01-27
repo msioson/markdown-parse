@@ -9,14 +9,45 @@ public class MarkdownParse {
         ArrayList<String> toReturn = new ArrayList<>();
         // find the next [, then find the ], then find the (, then take up to
         // the next )
-        int currentIndex = 0;
-        while(currentIndex < markdown.length()) {
-            int nextOpenBracket = markdown.indexOf("[", currentIndex);
+        int currentIndex, bracketCount, parenthesesCount, closeParen, openParen, openBracket, closeBracket;
+        currentIndex = bracketCount = parenthesesCount = closeParen = openParen = openBracket = closeBracket = 0;
+        boolean preexistingBrackets = false;
+
+        while(currentIndex < markdown.length()) {   
+            if(markdown.charAt(currentIndex) == '[') {
+                if((bracketCount == 0) && (parenthesesCount == 0)) //Make sure the brackets and parentheses are balanced
+                    openBracket = currentIndex;
+                bracketCount++;
+            }
+            if(markdown.charAt(currentIndex) == ']') {
+                bracketCount--;
+                if((bracketCount == 0) && (parenthesesCount == 0)){
+                    closeBracket = currentIndex;
+                    preexistingBrackets = true;
+                }
+            }
+            if((markdown.charAt(currentIndex) == '(')) {
+                if((parenthesesCount == 0) && (bracketCount == 0))
+                    openParen = currentIndex;
+                parenthesesCount++;
+            }
+            if((markdown.charAt(currentIndex) == ')')) {
+                parenthesesCount--;
+                if((parenthesesCount == 0) && (bracketCount == 0)) {
+                    closeParen = currentIndex;
+                    if(preexistingBrackets) { // Makes sure that there are brackets before the set of parentheses
+                        toReturn.add(markdown.substring(openParen + 1, closeParen));
+                        preexistingBrackets = false;
+                    }
+                }   
+            }
+            currentIndex++;
+            /*int nextOpenBracket = markdown.indexOf("[", currentIndex);
             int nextCloseBracket = markdown.indexOf("]", nextOpenBracket);
             int openParen = markdown.indexOf("(", nextCloseBracket);
             int closeParen = markdown.indexOf(")", openParen);
             toReturn.add(markdown.substring(openParen + 1, closeParen));
-            currentIndex = closeParen + 1;
+            currentIndex = closeParen + 1;*/
         }
         return toReturn;
     }
