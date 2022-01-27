@@ -13,9 +13,10 @@ public class MarkdownParse {
         currentIndex = bracketCount = parenthesesCount = closeParen = openParen = openBracket = closeBracket = 0;
         boolean preexistingBrackets = false;
 
-        while(currentIndex < markdown.length()) {   
+        while(currentIndex < markdown.length()) {
             if(markdown.charAt(currentIndex) == '[') {
-                if((bracketCount == 0) && (parenthesesCount == 0)) //Make sure the brackets and parentheses are balanced
+                //Make sure the brackets and parentheses are balanced
+                if((bracketCount == 0) && (parenthesesCount == 0))
                     openBracket = currentIndex;
                 bracketCount++;
             }
@@ -35,14 +36,16 @@ public class MarkdownParse {
                 parenthesesCount--;
                 if((parenthesesCount == 0) && (bracketCount == 0)) {
                     closeParen = currentIndex;
-                    if(preexistingBrackets) { // Makes sure that there are brackets before the set of parentheses
+                    // Makes sure that there are brackets before the set of parentheses
+                    if(preexistingBrackets) {
                         toReturn.add(markdown.substring(openParen + 1, closeParen));
                         preexistingBrackets = false;
                     }
                 }   
             }
             currentIndex++;
-            /*int nextOpenBracket = markdown.indexOf("[", currentIndex);
+            /*
+            int nextOpenBracket = markdown.indexOf("[", currentIndex);
             int nextCloseBracket = markdown.indexOf("]", nextOpenBracket);
             int openParen = markdown.indexOf("(", nextCloseBracket);
             int closeParen = markdown.indexOf(")", openParen);
