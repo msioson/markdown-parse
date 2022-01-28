@@ -37,6 +37,8 @@ public class MarkdownParse {
                 if((parenthesesCount == 0) && (bracketCount == 0)) {
                     closeParen = currentIndex;
                     // Makes sure that there are brackets before the set of parentheses
+                    if(closeBracket + 1 != openParen)
+                        preexistingBrackets = false;
                     if(preexistingBrackets) {
                         toReturn.add(markdown.substring(openParen + 1, closeParen));
                         preexistingBrackets = false;
