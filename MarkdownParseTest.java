@@ -4,24 +4,20 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
-import java.util.ArrayList;
 
 public class MarkdownParseTest {
-
     @Test
     public void testSnippet1() throws IOException {
         String contents = Files.readString(Path.of("./snippet-1.md"));
         List<String> expect = List.of("`google.com", "google.com", "ucsd.edu");
         assertEquals(expect, MarkdownParse.getLinks(contents));
     }
-
     @Test
     public void testSnippet2() throws IOException {
         String contents = Files.readString(Path.of("./snippet-2.md"));
         List<String> expect = List.of("a.com", "a.com(())", "example.com");
         assertEquals(expect, MarkdownParse.getLinks(contents));
     }
-
     @Test
     public void testSnippet3() throws IOException {
         String contents = Files.readString(Path.of("./snippet-3.md"));
